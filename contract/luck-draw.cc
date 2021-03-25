@@ -108,19 +108,16 @@ public:
             ctx->error("missing initiator");
             return;
         }
-
         if (!isAdmin(ctx, caller)) {
             ctx->error("you do not have permission to call this method");
             return;
         }
-
         const std::string& seedStr = ctx->arg("seed");
         if (seedStr.empty()) {
             ctx->error("missing seed");
             return;
         }
         int seed = std::atoi(seedStr.c_str());
-
         // 获取总奖券数
         std::string lastidStr;
         if (!ctx->get_object(TICKETS, &lastidStr)) {
@@ -132,7 +129,6 @@ public:
             ctx->error("no luck draw tickets");
             return;
         }
-
         // 抽奖
         srand(seed);
         int lucknum = (rand() % lastid) + 1;
@@ -143,7 +139,6 @@ public:
             ctx->error("get luck ticket failed");
             return;
         }
-
         // 记录抽奖结果
         if (!ctx->put_object(RESULT, luckuser)) {
             ctx->error("save luck draw result failed");

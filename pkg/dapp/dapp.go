@@ -19,7 +19,6 @@ var (
 
 func init(){
 	var err error
-	// TODO add your keys here
 	account,err = xuperaccount.GetAccountFromPlainFile(config.KeyPath);
 
 	if err!=nil{
@@ -40,9 +39,19 @@ func Deploy(c*gin.Context){
 		c.JSON(http.StatusBadRequest,"missing contract_id")
 		return
 	}
-	client := contract.InitWasmContract(account,config.Host ,config.BCName,args.ContractId,"XC1111111111111111@xuper")
+	client := contract.InitWasmContract(
+		account,
+		config.Host ,
+		config.BCName,
+		args.ContractId,
+		config.ContractAccount,
+		)
 
-	TxId,err:=client.DeployWasmContract(map[string]string{"admin":account.Address},config.CodePath,"c")
+	TxId,err:=client.DeployWasmContract(
+		map[string]string{"admin":account.Address},
+		config.CodePath,
+		"c",
+		)
 	if err!=nil{
 		c.Error(err)
 		return
@@ -65,7 +74,13 @@ func GetLuckId(c*gin.Context){
 		c.JSON(http.StatusBadRequest,"missing contract_id")
 	}
 
-	client := contract.InitWasmContract(account,config.Host,"xuper",args.ContractId,"XC1111111111111111@xuper")
+	client := contract.InitWasmContract(
+		account,
+		config.Host,
+		config.BCName,
+		args.ContractId,
+		config.ContractAccount,
+		)
 
 	preInvokeResp, err := client.PreInvokeWasmContract(GET_LUCK_ID, map[string]string{})
 	if err!=nil{
