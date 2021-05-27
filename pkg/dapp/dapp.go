@@ -106,7 +106,7 @@ func StartLuckDraw(c *gin.Context) {
 		Seed       string `json:"seed"`
 	}{}
 	c.BindJSON(args)
-	client := contract.InitWasmContract(account, config.Host, config.BCName, args.ContractId, "XC1111111111111111@xuper")
+	client := contract.InitWasmContract(account, config.Host, config.BCName, args.ContractId, config.ContractAccount)
 	preInvokeResp, err := client.PreInvokeWasmContract(START_LUCK_DRAW, map[string]string{
 		"seed": args.Seed,
 	})
@@ -140,7 +140,7 @@ func GetResult(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "missing contract_id")
 	}
 
-	client := contract.InitWasmContract(account, config.Host, "xuper", args.ContractId, "XC1111111111111111@xuper")
+	client := contract.InitWasmContract(account, config.Host, "xuper", args.ContractId, config.ContractAccount)
 	preInvokeResp, err := client.PreInvokeWasmContract(GET_RESULT, map[string]string{})
 	if err != nil {
 		c.Error(err)
